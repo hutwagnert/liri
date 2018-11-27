@@ -1,13 +1,11 @@
-/*
-*	Load Required Node Modules
-*/
 
-require("dotenv").config();
+//need to get dotenv working
+//require("dotenv").config();
 
 var Spotify = require('node-spotify-api');
 var request = require('request');
 var fs = require('fs');
-
+//spotify keys
 var spotify = new Spotify ({
     id:'6b8b32bdadc742c4bd12207882ddfebf',
     secret:'677a834def3147ebb59552a5916872c6'
@@ -15,6 +13,7 @@ var spotify = new Spotify ({
 
 
 //var keys = require('./keys');
+//need to get this working
 
 
 // Read in the command line arguments
