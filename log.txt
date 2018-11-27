@@ -1,0 +1,57 @@
+
+
+User Command: node liri.js spotify-this-song 
+
+User Command: node liri.js movie-this 
+
+ERROR: Retrieving OMDB entry -- nullUser Command: node liri.js spotify-this-song 
+
+User Command: node liri.js spotify-this-song 
+
+User Command: C:\Program Files\nodejs\node.exe,C:\Users\thutwagner\Desktop\Personal\liri\liri.js,spotifiy-this-song
+
+LIRI Response:
+
+Usage:
+    node liri.js spotify-this-song "<song_name>"
+    node liri.js movie-this "<movie_name>"
+    node liri.js do-what-it-says
+
+User Command: node liri.js spotify-this-song <Love> 
+
+User Command: node liri.js spotify-this-song 
+
+User Command: node liri.js spotify-this-song 
+
+User Command: node liri.js spotify-this-song 
+
+User Command: node liri.js spotify-this-song 
+
+User Command: node liri.js spotify-this-song 
+
+User Command: node liri.js spotify-this-song 
+
+LIRI Response:
+
+------------------------
+Song Information:
+------------------------
+
+Song Name: The Sign
+Artist: Ace of Base
+Album: The Sign (US Album) [Remastered]
+Preview Here: https://p.scdn.co/mp3-preview/4c463359f67dd3546db7294d236dd0ae991882ff?cid=6b8b32bdadc742c4bd12207882ddfebf
+
+User Command: node liri.js spotify-this-song <love> 
+
+LIRI Response:
+
+------------------------
+Song Information:
+------------------------
+
+Song Name: Fuck Love (feat. Trippie Redd)
+Artist: XXXTENTACION
+Album: 17
+Preview Here: https://p.scdn.co/mp3-preview/a6bbae399c7e05f8b3987c3e293e544690e796ce?cid=6b8b32bdadc742c4bd12207882ddfebf
+
