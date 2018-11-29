@@ -1,18 +1,24 @@
 
 //need to get dotenv working
-//require("dotenv").config();
-
+var dotenv = require("dotenv").config();
+var keys = require('./keys')
 var Spotify = require('node-spotify-api');
 var request = require('request');
-var omdb = require('omdb');
+var omdbApi = require('omdb-client');
 var fs = require('fs');
 //spotify keys
-var spotify = new Spotify ({
-    id:'6b8b32bdadc742c4bd12207882ddfebf',
-    secret:'677a834def3147ebb59552a5916872c6'
-});
+// var spotify = new Spotify ({
+//     id:'6b8b32bdadc742c4bd12207882ddfebf',
+//     secret:'677a834def3147ebb59552a5916872c6'
+// });
+var apikeyOMDB = keys.omdb;
+var spotify =  new Spotify(keys.spotify);
+// function nono (){
+// 	console.log(spotify);
+// 	console.log(yyy);
+// }
 
-
+// console.log(apikeyOMDB);
 //var keys = require('./keys');
 //need to get this working
 
@@ -30,7 +36,19 @@ if (comLiri === `spotify-this-song`) {
 	songFinder(liriArg);
 
 } else if (comLiri === `movie-this`) {
-	retrieveOBDBInfo(liriArg);}
+	omdbFinder(liriArg);
+} else if (comLiri === `do-what-it-says`) {
+	dowhatitsays();
+}else {
+	console.log(
+		"Please ensure you have npm installed : node-spotify-api , omdb-client, dotenv " +'\n'+
+		" To search a song type: node liri.js spotify-this-song 'Song title'" + '\n'+
+		"To search a movie type: node liri.js movie-this 'Movie Title'" +'\n'+
+		"To search via randomtxt file type: node liri.js do-what-it-says" +'\n'
+
+	)
+}
+
 
 // songFinder will retrieve information on a song from Spotify
 function songFinder(songto) {
@@ -42,8 +60,6 @@ function songFinder(songto) {
 	} else {
 		searchSong = songto;
 	}
-
-
     spotify.search ({ type: 'track', query: searchSong }, function(error, data) {
         if (error) {
 			var errorStr1 = 'Error' + error;
@@ -52,7 +68,7 @@ function songFinder(songto) {
 	    } else {
 			var songInfo = data.tracks.items[0];
 			if (!songInfo) {
-				var errorStr2 = 'Error';
+				var errorStr2 = 'Error we couldnt find that song ensure you spelled it right or try a new one';
 				console.log(errorStr2);
 				return;
 			} else {
@@ -68,10 +84,10 @@ function songFinder(songto) {
 			}
 	    }
       });
-    }
+	}
 
 // ombd
-function retrieveOBDBInfo(movie) {
+function omdbFinder(movie) {
 
 	// no movie
 	var movieSearch;
@@ -80,33 +96,21 @@ function retrieveOBDBInfo(movie) {
 	} else {
 		movieSearch = movie;
 	}
-	movieSearch = search.split(' ').join('+');
-
-	var queryStr = 'http://www.omdbapi.com/?t=' + movieSearch + '&plot=full&tomatoes=true';
-	request(queryStr, function (error, response, body) {
-		if ( error || (response.statusCode !== 200) ) {
-			var errorStr1 = 'ERROR: Retrieving OMDB entry -- ' + error;
-
-			// Append the error string to the log file
-			fs.appendFile('./log.txt', errorStr1, (err) => {
-				if (err) throw err;
-				console.log(errorStr1);
-			});
-			return;
-		} else {
-			var data = JSON.parse(body);
-			if (!data.Title && !data.Released && !data.imdbRating) {
-				var errorStr2 = 'ERROR: No movie info retrieved, please check the spelling of the movie name!';
-
-				// Append the error string to the log file
-				fs.appendFile('./log.txt', errorStr2, (err) => {
-					if (err) throw err;
-					console.log(errorStr2);
-				});
-				return;
-			} else {
-		    	// Pretty print the movie information
-		    	var outputStr = '------------------------\n' + 
+	
+	var params = {
+		apiKey: apikeyOMDB,
+		title: movieSearch
+	}
+	omdbApi.get(params, function(err,data) {
+console.log(data);
+if(err != null){
+	console.log("Error" + err);
+}else if(data.Title === null){
+	console.log("try a new movie we couldnt find that one")
+}
+else {
+	console.log(
+		'------------------------\n' + 
 								'Movie Information:\n' + 
 								'------------------------\n\n' +
 								'Movie Title: ' + data.Title + '\n' + 
@@ -117,17 +121,37 @@ function retrieveOBDBInfo(movie) {
 								'Plot: ' + data.Plot + '\n' +
 								'Actors: ' + data.Actors + '\n' + 
 								'Rotten Tomatoes Rating: ' + data.tomatoRating + '\n' +
-								'Rotten Tomatoes URL: ' + data.tomatoURL + '\n';
+								'Rotten Tomatoes URL: ' + data.tomatoURL + '\n'
+			
+	)
+}
 
+	});
 
+}
+function dowhatitsays(){
+	fs.readFile('./random.txt', 'utf8', function (err, data) {
+		if (err) {
+			console.log('Error' + err);
+			return;
+		} else {
+			var cmdString = data.split(',');
+			var command = cmdString[0].trim();
+			var param = cmdString[1].trim();
+
+			switch(command) {
+				case 'spotify-this-song':
+					songFinder(param);
+					break;
+
+				case 'movie-this':
+					omdbFinder(param);
+					break;
 			}
 		}
 	});
-
-
+	
 }
-
-
 
  
 
