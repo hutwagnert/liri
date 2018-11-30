@@ -4,8 +4,11 @@ var dotenv = require("dotenv").config();
 var keys = require('./keys')
 var Spotify = require('node-spotify-api');
 var request = require('request');
+
+var bandsintown = require('bandsintown')("0a7fe56972f21ac21c79883a7696a2a9");
 var omdbApi = require('omdb-client');
 var fs = require('fs');
+var BandsInTownEvents = require('bandsintown-events');
 //spotify keys
 // var spotify = new Spotify ({
 //     id:'6b8b32bdadc742c4bd12207882ddfebf',
@@ -39,18 +42,28 @@ if (comLiri === `spotify-this-song`) {
 	omdbFinder(liriArg);
 } else if (comLiri === `do-what-it-says`) {
 	dowhatitsays();
+} else if (comLiri === `find-event`) {
+	eventFinder(liriArg);
 }else {
 	console.log(
 		"Please ensure you have npm installed : node-spotify-api , omdb-client, dotenv " +'\n'+
 		" To search a song type: node liri.js spotify-this-song 'Song title'" + '\n'+
+		" To search for an event type: node liri.js find-event" + '\n'+
 		"To search a movie type: node liri.js movie-this 'Movie Title'" +'\n'+
 		"To search via randomtxt file type: node liri.js do-what-it-says" +'\n'
 
 	)
 }
 
+ 
 
-// songFinder will retrieve information on a song from Spotify
+
+
+
+//eventFinder finds band events
+
+
+// songFinder find song
 function songFinder(songto) {
 
 	// setsonger
@@ -85,7 +98,43 @@ function songFinder(songto) {
 	    }
       });
 	}
+	function isEmpty(obj) {
+		for(var key in obj) {
+			if(obj.hasOwnProperty(key))
+				return false;
+		}
+		return true;
+	}
+	//find the band stuff
+	function eventFinder(bandsearcher){
+		var bandFind;
+		if (bandsearcher === '') {
+			bandFind = 'Elton John';
+		} else {
+			bandFind = bandsearcher;
+		}
+		bandsintown
+		.getArtistEventList(bandFind)
+		.then(function(events) {
+			
+			
+			if(isEmpty(events)){
+				console.log('nothing here! try a new band name');
 
+			}else{
+				var outputStr = '------------------------\n' + 
+				'Band Info:\n' + 
+				'------------------------\n\n' + 
+				'Artist Title: ' + events[0].title + '\n'+ 
+				'Date:' + events[0].formatted_datetime + '\n' + 
+				'Location: ' + events[0].formatted_location + '\n' + 
+				'Are Tickets available?: ' + events[0].ticket_status + '\n'+
+				'Check it out: ' + events[0].ticket_url + '\n';
+console.log(outputStr);}
+
+		  
+		});
+	}
 // ombd
 function omdbFinder(movie) {
 
