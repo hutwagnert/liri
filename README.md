@@ -22,4 +22,6 @@ OMDB_API =XXX
 BAND_API =XXX
 ~
 
+There is no log file. I did not have time to address that.
+
 I never got the Bands in Town App Id working correctly. So it is in the liri.js file
