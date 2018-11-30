@@ -1,29 +1,13 @@
-
-//need to get dotenv working
+//var require npms
 var dotenv = require("dotenv").config();
 var keys = require('./keys')
 var Spotify = require('node-spotify-api');
 var request = require('request');
-
 var bandsintown = require('bandsintown')("0a7fe56972f21ac21c79883a7696a2a9");
 var omdbApi = require('omdb-client');
 var fs = require('fs');
-var BandsInTownEvents = require('bandsintown-events');
-//spotify keys
-// var spotify = new Spotify ({
-//     id:'6b8b32bdadc742c4bd12207882ddfebf',
-//     secret:'677a834def3147ebb59552a5916872c6'
-// });
 var apikeyOMDB = keys.omdb;
 var spotify =  new Spotify(keys.spotify);
-// function nono (){
-// 	console.log(spotify);
-// 	console.log(yyy);
-// }
-
-// console.log(apikeyOMDB);
-//var keys = require('./keys');
-//need to get this working
 
 
 // args
@@ -46,7 +30,7 @@ if (comLiri === `spotify-this-song`) {
 	eventFinder(liriArg);
 }else {
 	console.log(
-		"Please ensure you have npm installed : node-spotify-api , omdb-client, dotenv " +'\n'+
+		"Please ensure you have npm installed : node-spotify-api , omdb-client, dotenv, bandsintown, request" +'\n'+
 		" To search a song type: node liri.js spotify-this-song 'Song title'" + '\n'+
 		" To search for an event type: node liri.js find-event" + '\n'+
 		"To search a movie type: node liri.js movie-this 'Movie Title'" +'\n'+
@@ -195,6 +179,10 @@ function dowhatitsays(){
 
 				case 'movie-this':
 					omdbFinder(param);
+					break;
+
+					case 'find-event':
+					eventFinder(param);
 					break;
 			}
 		}
