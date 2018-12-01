@@ -7,7 +7,7 @@ var bandsintown = require('bandsintown')("0a7fe56972f21ac21c79883a7696a2a9");
 var omdbApi = require('omdb-client');
 var fs = require('fs');
 var apikeyOMDB = keys.omdb;
-var spotify =  new Spotify(keys.spotify);
+var spotify =  new Spotify(keys.spot);
 
 
 // args
@@ -135,7 +135,7 @@ function omdbFinder(movie) {
 		title: movieSearch
 	}
 	omdbApi.get(params, function(err,data) {
-console.log(data);
+
 if(err != null){
 	console.log("Error" + err);
 }else if(data.Title === null){
